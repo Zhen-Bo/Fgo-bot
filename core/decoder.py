@@ -1,16 +1,3 @@
-def get_str(default_skill):
-    get_str_str = list()
-    if '(1)' in default_skill:
-        pos1 = default_skill.find('(1)')   # 從字串開頭往後找
-    if '(2)' in default_skill:
-        pos2 = default_skill.find('(2)')   # 從字串開頭往後找
-    if '(3)' in default_skill:
-        pos3 = default_skill.find('(3)')   # 從字串開頭往後找
-    get_str_str.append(default_skill[pos1+3:pos2])
-    get_str_str.append(default_skill[pos2+3:pos3])
-    get_str_str.append(default_skill[pos3+3:])
-    return get_str_str
-
 def skill_btn(var):
     return {
     'a': int(1),
@@ -22,7 +9,9 @@ def skill_btn(var):
     'g': int(7),
     'h': int(8),
     'i': int(9),
-    }.get(var,'0')  #'error'為預設返回值，可自設定
+    'm': True,
+    'x': True,
+    }.get(var,False)  #'error'為預設返回值，可自設定
 
 def crd_btn(var):
     return {
@@ -36,13 +25,6 @@ def crd_btn(var):
     '5': int(5),
     }.get(var,'0')  #'error'為預設返回值，可自設定
 
-def chk_skill(skill, tar):
-    skillbtn = skill_btn(skill)
-    if bool(tar == '0'):
-        return "round.select_servant_skill(%s)"%skillbtn
-    else:
-        return "round.select_servant_skill(%s, %s)"%(skillbtn, tar)
-
 def chk_card(crd):
     crd_list = []
     for i in range(3):
@@ -50,30 +32,51 @@ def chk_card(crd):
             crd_list.append(crd_btn(crd[i]))
     return crd_list
 
-
-def decode(skill_str, crd_str):
-    instr = []
-    skill_str = get_str(skill_str)
-    crd_str = get_str(crd_str)
-    instr.append("round.quick_start()")
-    for i in range(3):
-        instr.append("round.waiting_phase(%s)"%str(i+1))
-        for j in range(int(len(skill_str[i])/3)):
-            if skill_str[i][j * 3] != 'm':
-                instr.append(chk_skill(skill_str[i][j * 3], skill_str[i][j * 3 + 2]))
-            elif skill_str[i][j * 3] == 'x':
-                instr.append("round.select_master_skill(3, %s, %s)"% (skill_str[i][j * 3 + 1], skill_str[i][j * 3 + 2]))
+def chk_skill(nextround, skill):
+    cast_skill = []
+    cast_skill.append("round.waiting_phase(%s)"%nextround)
+    #print("round.waiting_phase(%s)"%nextround)
+    for i in range(len(skill)):
+        if skill_btn(skill[i]):
+            if skill[i] == 'm':
+                if not skill_btn(skill[i+1]):
+                    if i + 2 < len(skill):
+                        if not skill_btn(skill[i+2]):
+                            cast_skill.append("round.select_master_skill(%s, %s)"%(skill[i+1], skill[i+2]))
+                            #print("round.select_master_skill(%s, %s)"%(skill[i+1], skill[i+2]))
+                    else:
+                        cast_skill.append("round.select_master_skill(%s)"%skill[i+1])
+                        #print("round.select_master_skill(%s)"%skill[i+1])
+            elif skill[i] == 'x':
+                cast_skill.append("round.select_master_skill(3, %s, %s)"%(skill[i+1], skill[i+2]))
+                #print("round.select_master_skill(3, %s, %s)"%(skill[i+1], skill[i+2]))
+            elif i + 1 < len(skill):
+                if not skill_btn(skill[i+1]):
+                    cast_skill.append("round.select_servant_skill(%s, %s)"%(skill_btn(skill[i]), skill[i+1]))
+                    #print("round.select_servant_skill(%s, %s)"%(skill_btn(skill[i]), skill[i+1]))
+                else:
+                    cast_skill.append("round.select_servant_skill(%s)"%skill_btn(skill[i]))
+                    #print("round.select_servant_skill(%s)"%skill_btn(skill[i]))
             else:
-                instr.append("round.select_master_skill(%s, %s)"% (skill_str[i][j * 3 + 1], skill_str[i][j * 3 + 2]))
-        if len(chk_card(crd_str[i])) == 1:
-            seq = chk_card(crd_str[i])
-            instr.append("round.select_cards([%d])"%seq[0])
-        elif len(chk_card(crd_str[i])) == 2:
-            seq = chk_card(crd_str[i])
-            instr.append("round.select_cards([%d, %d])"%(seq[0], seq[1]))
-        elif len(chk_card(crd_str[i])) == 3:
-            seq = chk_card(crd_str[i])
-            instr.append("round.select_cards([%d, %d, %d])"%(seq[0], seq[1], seq[2]))
+                cast_skill.append("round.select_servant_skill(%s)"%skill_btn(skill[i]))
+                #print("round.select_servant_skill(%s)"%skill_btn(skill[i]))
+    return cast_skill
 
-    instr.append("round.finish_battle()")
-    return instr
+def decode(code):
+    combat_order = []
+    combat_order.append("round.quick_start()")
+    #print("round.quick_start()")
+    for i in range(6):
+        if i < 3:
+            combat_order += chk_skill(i+1, code[i])
+            if len(chk_card(code[i+3])) == 1:
+                seq = chk_card(code[i+3])
+                combat_order.append("round.select_cards([%d])"%seq[0])
+            elif len(chk_card(code[i+3])) == 2:
+                seq = chk_card(code[i+3])
+                combat_order.append("round.select_cards([%d, %d])"%(seq[0], seq[1]))
+            elif len(chk_card(code[i+3])) == 3:
+                seq = chk_card(code[i+3])
+                combat_order.append("round.select_cards([%d, %d, %d])"%(seq[0], seq[1], seq[2]))
+    combat_order.append("round.finish_battle()")
+    return combat_order
