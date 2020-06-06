@@ -1,0 +1,60 @@
+import sys, time, os, random
+from cv2 import cv2
+import numpy as np
+from core import adb
+
+adbkit = adb.adbKit()
+
+def get_sh():
+    adbkit.screenshots()
+
+def standby(template, acc = 0.9):
+    get_sh()
+    # 载入图像
+    target_img = cv2.imread("screencap.png")
+    find_img   = cv2.imread(str(template))
+    find_height, find_width, find_channel = find_img.shape[::]
+
+    # 模板匹配
+    result = cv2.matchTemplate(target_img, find_img, cv2.TM_CCOEFF_NORMED)
+    min_val,max_val,min_loc,max_loc = cv2.minMaxLoc(result)
+
+    if max_val > acc:
+        print(max_val)
+        return max_loc, find_height, find_width
+    else:
+        print(max_val)
+        return False
+
+def adbtap(pos):
+    pointUpLeft   = pos[0]
+    pointLowRight = (pos[0][0]+pos[2], pos[0][1]+pos[1])
+    pointCentre   = (pos[0][0]+(pos[2]/2), pos[0][1]+(pos[1]/2))
+    Px = int(pointCentre[0])
+    Py = int(pointCentre[1])
+    print("ready to tap", Px, Py)
+    adbkit.click(Px, Py)
+
+def get_pos(template, acc = 0.9):
+    pos = standby(template, acc)
+    if pos:
+        print("get pos", pos[0])
+        return pos
+    else:
+        return False
+
+def tap(Px, Py):
+    adbkit.click(Px, Py)
+
+def list_tap(pos):
+    adbkit.click(pos[0], pos[1])
+
+def swipe(org: (int, int), tar: (int, int), delay):
+    cmdSwipe = 'adb shell input swipe {x1} {y1} {x2} {y2} {delay1}'.format(
+        x1=org[0],
+        y1=org[1],
+        x2=tar[0],
+        y2=tar[1],
+        delay1=int(delay*1000)
+    )
+    os.system(cmdSwipe)
