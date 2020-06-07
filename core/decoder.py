@@ -27,7 +27,7 @@ def crd_btn(var):
 
 def chk_card(crd):
     crd_list = []
-    for i in range(3):
+    for i in range(len(crd)):
         if crd[i] != 'x':
             crd_list.append(crd_btn(crd[i]))
     return crd_list

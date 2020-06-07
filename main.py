@@ -28,14 +28,14 @@ if __name__ == '__main__':
         codelist = [battle1_str, battle2_str, battle3_str, crd1_str, crd2_str, crd3_str]
 
         ckp = images_path + "/menu.png"
-        print(ckp)
-        round = auto(ckp, support, (apple_count, apple), recover_time * 60)
+        round = auto(ckp, support, (int(apple_count), apple), int(recover_time) * 60)
         tstart = time.time()
-
+        counter = 0
         for i in range(int(run_times)):
             print("Round:", i+1)
             instr =  decoder.decode(codelist)
             for i in range(len(instr)):
                 exec(instr[i])
-        tend = time.time()
-        print("執行 %s 次;耗時 %d 秒"%(setting[0], int(tend - tstart)))
+            tend = time.time()
+            counter += 1
+            print("執行 %s 次;耗時 %d 秒"%(counter, int(tend - tstart)))

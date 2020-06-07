@@ -1,14 +1,20 @@
 import time
 import random
-from core import util, crds
+from core import util
+from configparser import ConfigParser
 
 class auto():
     def __init__(self, ckp: str, spt: str, apl: (int, str) = (0, ""), timer = 12000):
         self.checkpoint = ckp
         self.support = spt
-        self.counts = apl[0]  # apple counts
+        self.counts = int(apl[0])  # apple counts
         self.apple = apl[1]
         self.timer = int(timer)
+        self.cfg = ConfigParser()
+        self.cfg.read('config/core/button.ini')
+
+    def debug(self):
+        print("debug")
 
     def quick_start(self, advance=True):
         self.select_task(self.checkpoint)
@@ -20,9 +26,10 @@ class auto():
             print("waiting task select")
             time.sleep(0.2)
         util.tap(1100, 170)
-        time.sleep(0.5)
+        time.sleep(1)
         if util.get_pos("images/noap.png"):
             if self.counts > 0:
+                print("NO AP!")
                 self.eat_apple()
             elif self.counts == -1:
                 util.tap(635, 610)
@@ -33,11 +40,15 @@ class auto():
         print("[INFO] task selected.")
 
     def eat_apple(self):
+        print("eat apple")
         if self.apple == 'au':
+            print("au apple")
             util.tap(375, 320)
         elif self.apple == 'ag':
+            print("ag apple")
             util.tap(375, 470)
         elif self.apple == 'sq':
+            print("sq apple")
             util.tap(375, 170)
         time.sleep(0.2)
         util.tap(830, 560)
@@ -110,7 +121,10 @@ class auto():
         while not util.get_pos("images/attack.png"):
             print("Waiting for Attack button")
             time.sleep(0.2)
-        util.list_tap(crds.SERVANT_SKILLS[skill-1])
+        pos = self.cfg['skills']['%s'%skill]
+        pos = pos.split(',')
+        util.tap(pos[0], pos[1])
+        print("tap", pos)
         print("use servent", str(int((skill-1)/3 + 1)) , "skill", str((skill-1)%3 + 1))
         time.sleep(0.5)
         if tar != 0:
@@ -121,7 +135,9 @@ class auto():
         while not util.get_pos("images/select.png"):
             print("Waiting for servent select")
             time.sleep(0.2)
-        util.list_tap(crds.TARGETS[servant-1])
+        pos = self.cfg['servent']['%s'%servant]
+        pos = pos.split(',')
+        util.list_tap(pos)
         time.sleep(0.5)
 
     def select_cards(self, cards: [int]):
@@ -129,7 +145,9 @@ class auto():
             print("Waiting for Attack button")
             time.sleep(0.2)
         # tap ATTACK
-        util.list_tap(crds.ATTACK)
+        pos = self.cfg['attack']['button']
+        pos = pos.split(',')
+        util.list_tap(pos)
         time.sleep(1)
         while len(cards) < 3:
             x = random.randrange(1, 6)
@@ -138,7 +156,9 @@ class auto():
             cards.append(x)
         # tap CARDS
         for card in cards:
-            util.list_tap(crds.CARDS[card-1])
+            pos = self.cfg['attack']['%s'%card]
+            pos = pos.split(',')
+            util.list_tap(pos)
             time.sleep(0.2)
         print("[INFO] Selected cards: ", cards)
 
@@ -147,7 +167,9 @@ class auto():
             print("Waiting for Attack button")
             time.sleep(0.2)
         self.toggle_master_skill()
-        util.list_tap(crds.MASTER_SKILLS[skill-1])
+        pos = self.cfg['master']['%s'%skill]
+        pos = pos.split(',')
+        util.list_tap(pos)
         print("use master skill", skill)
         if org != 0 and tar == 0:
             self.select_servant(org)
@@ -158,50 +180,62 @@ class auto():
         while not util.get_pos("images/attack.png"):
             print("Waiting for Attack button")
             time.sleep(0.2)
-        util.list_tap(crds.MASTER)
+        pos = self.cfg['master']['button']
+        pos = pos.split(',')
+        util.list_tap(pos)
         print("toggle master skills")
 
     def change_servant(self, org: int, tar: int):
         while not util.get_pos("images/order_change.png"):
             print("Waiting for order change")
             time.sleep(0.2)
-        util.list_tap(crds.SERVANTS[org-1])
+        pos = self.cfg['servent']['s%s',org]
+        pos = pos.split(',')
+        util.list_tap(pos)
         time.sleep(0.1)
-        util.list_tap(crds.SERVANTS[tar+2])
+        pos = self.cfg['servent']['a%s',tar]
+        pos = pos.split(',')
+        util.list_tap(pos)
         time.sleep(0.1)
         util.tap(650, 620)  # confirm btn
 
     def finish_battle(self):
         while not util.get_pos("images/next.png"):
-            util.tap(10, 10)
+            util.tap(920, 45)
             print("Waiting next button")
             self.needattack()
             time.sleep(0.2)
         util.tap(1105, 670)
-        print("check friend request screen")
-        for i in range(4):
-            if util.get_pos("images/friendrequest.png"):
+        flag = 0
+        while not util.get_pos(self.checkpoint):
+            if flag ==0 and util.get_pos("images/friendrequest.png"):
+                print("check friend request screen")
                 util.tap(330, 610)
                 print("reject friend request")
-                break
-            time.sleep(0.5)
+                flag = 1
+            elif flag == 1:
+                util.tap(920, 45)
+            else:
+                util.tap(920, 45)
+            time.sleep(1)
         print("[INFO] Battle Finished.")
+
 
     def waiting_phase(self, phase: int):
         if phase == 1:
             while not util.get_pos("images/phase1.png", 0.8):
-                util.tap(10, 10)
+                util.tap(920, 45)
                 print("Waiting for phase1")
                 time.sleep(0.2)
         elif phase == 2:
             while not util.get_pos("images/phase2.png", 0.8):
-                util.tap(10, 10)
+                util.tap(920, 45)
                 print("Waiting for phase2")
                 self.needattack()
                 time.sleep(0.2)
         elif phase == 3:
             while not util.get_pos("images/phase3.png", 0.8):
-                util.tap(10, 10)
+                util.tap(920, 45)
                 print("Waiting for phase3")
                 self.needattack()
                 time.sleep(0.2)

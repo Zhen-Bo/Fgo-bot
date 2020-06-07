@@ -32,7 +32,7 @@ def adbtap(pos):
     pointCentre   = (pos[0][0]+(pos[2]/2), pos[0][1]+(pos[1]/2))
     Px = int(pointCentre[0])
     Py = int(pointCentre[1])
-    print("ready to tap", Px, Py)
+    print("ready to tap", Px, ",", Py)
     adbkit.click(Px, Py)
 
 def get_pos(template, acc = 0.9):
@@ -43,7 +43,7 @@ def get_pos(template, acc = 0.9):
     else:
         return False
 
-def tap(Px, Py):
+def tap(Px: int, Py: int):
     adbkit.click(Px, Py)
 
 def list_tap(pos):
@@ -57,4 +57,5 @@ def swipe(org: (int, int), tar: (int, int), delay):
         y2=tar[1],
         delay1=int(delay*1000)
     )
+    print(cmdSwipe)
     os.system(cmdSwipe)
