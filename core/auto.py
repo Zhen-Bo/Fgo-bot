@@ -14,6 +14,7 @@ class auto():
         self.cfg.read('config/core/button.ini')
 
     def debug(self):
+        util.tap(920, 45)
         print("debug")
 
     def quick_start(self, advance=True):
@@ -28,6 +29,7 @@ class auto():
         util.tap(1100, 170)
         time.sleep(1)
         if util.get_pos("images/noap.png"):
+            print("remain apple counts:", self.counts)
             if self.counts > 0:
                 print("NO AP!")
                 self.eat_apple()
@@ -53,6 +55,7 @@ class auto():
         time.sleep(0.2)
         util.tap(830, 560)
         self.counts -= 1
+        print("apple_count:", self.counts)
 
     def wait_ap(self, timer):
         tStart = time.time()
@@ -201,8 +204,8 @@ class auto():
 
     def finish_battle(self):
         while not util.get_pos("images/next.png"):
-            util.tap(920, 45)
             print("Waiting next button")
+            util.tap(920, 45)
             self.needattack()
             time.sleep(0.2)
         util.tap(1105, 670)
