@@ -1,2 +1,5 @@
 test.py
 screencap.png
+/__pycache__/
+/config/__pycache__/
+/core/__pycache__/
