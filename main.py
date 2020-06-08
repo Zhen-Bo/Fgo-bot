@@ -9,7 +9,7 @@ if __name__ == '__main__':
 
         cfg_name = input()
         cfg = ConfigParser()
-        ini_path = "config/" + cfg_name + ".ini"
+        ini_path = "UserData/config/" + cfg_name + ".ini"
         cfg.read(ini_path)
 
         run_times = cfg['run_times']['times']

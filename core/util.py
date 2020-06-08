@@ -20,10 +20,10 @@ def standby(template, acc = 0.9):
     min_val,max_val,min_loc,max_loc = cv2.minMaxLoc(result)
 
     if max_val > acc:
-        print(max_val)
+        print("acc rate:", round(max_val, 2))
         return max_loc, find_height, find_width
     else:
-        print(max_val)
+        print("acc rate:", round(max_val, 2))
         return False
 
 def adbtap(pos):

@@ -11,11 +11,10 @@ class auto():
         self.apple = apl[1]
         self.timer = int(timer)
         self.cfg = ConfigParser()
-        self.cfg.read('config/core/button.ini')
+        self.cfg.read("core/ini/button.ini")
 
     def debug(self):
-        util.tap(920, 45)
-        print("debug")
+        print(self.cfg.sections())
 
     def quick_start(self, advance=True):
         self.select_task(self.checkpoint)
@@ -127,7 +126,6 @@ class auto():
         pos = self.cfg['skills']['%s'%skill]
         pos = pos.split(',')
         util.tap(pos[0], pos[1])
-        print("tap", pos)
         print("use servent", str(int((skill-1)/3 + 1)) , "skill", str((skill-1)%3 + 1))
         time.sleep(0.5)
         if tar != 0:
@@ -226,18 +224,18 @@ class auto():
 
     def waiting_phase(self, phase: int):
         if phase == 1:
-            while not util.get_pos("images/phase1.png", 0.8):
+            while not util.get_pos("images/phase1.png", 0.78):
                 util.tap(920, 45)
                 print("Waiting for phase1")
                 time.sleep(0.2)
         elif phase == 2:
-            while not util.get_pos("images/phase2.png", 0.8):
+            while not util.get_pos("images/phase2.png", 0.78):
                 util.tap(920, 45)
                 print("Waiting for phase2")
                 self.needattack()
                 time.sleep(0.2)
         elif phase == 3:
-            while not util.get_pos("images/phase3.png", 0.8):
+            while not util.get_pos("images/phase3.png", 0.78):
                 util.tap(920, 45)
                 print("Waiting for phase3")
                 self.needattack()
