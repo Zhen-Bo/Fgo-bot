@@ -74,7 +74,7 @@ class auto():
                     print("waiting ap recover")
                 time.sleep(1)
 
-    def update_support(self) -> bool:
+    def update_support(self):
         if util.get_pos("images/update.png"):
             util.tap(835, 125)
             time.sleep(0.5)
@@ -86,7 +86,6 @@ class auto():
                 util.tap(840, 560)
                 print("support_list_updata")
             time.sleep(0.5)
-            return True
 
     def advance_support(self, spt: str = None, tms: int = 3):
         if spt is None:
