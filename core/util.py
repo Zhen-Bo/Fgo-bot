@@ -11,9 +11,9 @@ adbkit = adb.adbKit()
 
 def standby(template, acc=0.85, special=False):
     # 模擬器截圖
-    adbkit.screenshots()
+    # adbkit.screenshots()
     # 载入图像
-    target_img = cv2.imread("screencap.png")
+    target_img = adbkit.screenshots()
     if special == True:
         cv2.rectangle(target_img, (0, 0), (1280, 420),
                       color=(0, 0, 0), thickness=-1)
@@ -29,7 +29,7 @@ def standby(template, acc=0.85, special=False):
 
     cv2.rectangle(target_img, reslist[3], (reslist[3][0]+find_width, reslist[3][1]+find_height),
                   color=(0, 255, 0), thickness=2)
-    cv2.imwrite("screencap-rect.png", target_img)
+    cv2.imwrite("screencap.png", target_img)
 
     if reslist[1] > acc:
         print("[Detect]acc rate:", round(reslist[1], 2))
