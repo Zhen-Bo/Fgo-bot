@@ -3,5 +3,5 @@ screencap.png
 /__pycache__/
 /config/__pycache__/
 /core/__pycache__/
-UserData/config/auto.ini
 screencap-rect.png
+UserData/config
