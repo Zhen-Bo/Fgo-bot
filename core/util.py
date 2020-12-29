@@ -32,10 +32,10 @@ def standby(template, acc=0.85, special=False):
     cv2.imwrite("screencap-rect.png", target_img)
 
     if reslist[1] > acc:
-        print("acc rate:", round(reslist[1], 2))
+        print("[Detect]acc rate:", round(reslist[1], 2))
         return reslist[3], find_height, find_width
     else:
-        print("acc rate:", round(reslist[1], 2))
+        print("[Detect]acc rate:", round(reslist[1], 2))
         return False, find_height, find_width
 
 
@@ -53,9 +53,10 @@ def adbtap(pos):  # nouse 點擊圖像座標(改用固定座標)
 def get_pos(template, acc=0.9):
     pos = standby(template, acc)
     if pos[0]:
-        print("get pos", pos[0])
+        print("[Detect]get pos", pos[0])
         return pos
     else:
+
         return False
 
 
