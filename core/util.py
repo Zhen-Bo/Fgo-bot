@@ -27,7 +27,7 @@ def standby(template, acc=0.85, special=False):
     reslist = cv2.minMaxLoc(result)
     #reslist[1] = max__val; reslist[3] = max_loc;
 
-    cv2.rectangle(target_img, reslist[3], (reslist[3][0]+find_height, reslist[3][1]+find_width),
+    cv2.rectangle(target_img, reslist[3], (reslist[3][0]+find_width, reslist[3][1]+find_height),
                   color=(0, 255, 0), thickness=2)
     cv2.imwrite("screencap-rect.png", target_img)
 
@@ -36,7 +36,7 @@ def standby(template, acc=0.85, special=False):
         return reslist[3], find_height, find_width
     else:
         print("[Detect]acc rate:", round(reslist[1], 2))
-        return False, find_height, find_width
+        return False
 
 
 """
@@ -49,15 +49,15 @@ def adbtap(pos):  # nouse 點擊圖像座標(改用固定座標)
     adbkit.click(Px, Py)
 """
 
-
-def get_pos(template, acc=0.9):
+# nouse 廢棄,都改用standby
+"""def get_pos(template, acc=0.9):
     pos = standby(template, acc)
     if pos[0]:
         print("[Detect]get pos", pos[0])
         return pos
     else:
 
-        return False
+        return False"""
 
 
 def tap(Px: int, Py: int):

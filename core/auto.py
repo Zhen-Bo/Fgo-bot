@@ -23,12 +23,12 @@ class auto():
         self.start_battle()
 
     def select_task(self, ckp: str):
-        while not util.get_pos(self.checkpoint):
+        while not util.standby(self.checkpoint):
             print("waiting task select")
             time.sleep(0.2)
         util.tap(1100, 170)
         time.sleep(1)
-        if util.get_pos("images/noap.png"):
+        if util.standby("images/noap.png"):
             print("remain apple counts:", self.counts)
             if self.counts > 0:
                 print("NO AP!")
@@ -75,7 +75,7 @@ class auto():
                 time.sleep(1)
 
     def update_support(self):
-        if util.get_pos("images/update.png"):
+        if util.standby("images/update.png"):
             util.tap(835, 125)
             time.sleep(0.5)
             if util.standby("images/close.png"):
@@ -136,13 +136,13 @@ class auto():
                 util.list_tap(spt_center)
 
     def start_battle(self):
-        while not util.get_pos("images/start.png"):
+        while not util.standby("images/start.png"):
             time.sleep(0.2)
         util.tap(1180, 670)
         print("[INFO] Battle started.")
 
     def select_servant_skill(self, skill: int, tar: int = 0):
-        while not util.get_pos("images/attack.png"):
+        while not util.standby("images/attack.png"):
             print("Waiting for Attack button")
             time.sleep(0.2)
         pos = self.cfg['skills']['%s' % skill]
@@ -156,7 +156,7 @@ class auto():
             print("to servent", tar)
 
     def select_servant(self, servant: int):
-        while not util.get_pos("images/select.png"):
+        while not util.standby("images/select.png"):
             print("Waiting for servent select")
             time.sleep(0.2)
         pos = self.cfg['servent']['%s' % servant]
@@ -165,7 +165,7 @@ class auto():
         time.sleep(0.5)
 
     def select_cards(self, cards: [int]):
-        while not util.get_pos("images/attack.png"):
+        while not util.standby("images/attack.png"):
             print("Waiting for Attack button")
             time.sleep(0.2)
         # tap ATTACK
@@ -187,7 +187,7 @@ class auto():
         print("[INFO] Selected cards: ", cards)
 
     def select_master_skill(self, skill: int, org: int = 0, tar: int = 0):
-        while not util.get_pos("images/attack.png"):
+        while not util.standby("images/attack.png"):
             print("Waiting for Attack button")
             time.sleep(0.2)
         self.toggle_master_skill()
@@ -201,7 +201,7 @@ class auto():
             self.change_servant(org, tar)
 
     def toggle_master_skill(self):
-        while not util.get_pos("images/attack.png"):
+        while not util.standby("images/attack.png"):
             print("Waiting for Attack button")
             time.sleep(0.2)
         pos = self.cfg['master']['button']
@@ -210,7 +210,7 @@ class auto():
         print("toggle master skills")
 
     def change_servant(self, org: int, tar: int):
-        while not util.get_pos("images/order_change.png"):
+        while not util.standby("images/order_change.png"):
             print("Waiting for order change")
             time.sleep(0.2)
         pos = self.cfg['servent']['s%s', org]
@@ -224,15 +224,15 @@ class auto():
         util.tap(650, 620)  # confirm btn
 
     def finish_battle(self):
-        while not util.get_pos("images/next.png"):
+        while not util.standby("images/next.png"):
             print("Waiting next button")
             util.tap(920, 45)
             self.needattack()
             time.sleep(0.2)
         util.tap(1105, 670)
         flag = 0
-        while not util.get_pos(self.checkpoint):
-            if flag == 0 and util.get_pos("images/friendrequest.png"):
+        while not util.standby(self.checkpoint):
+            if flag == 0 and util.standby("images/friendrequest.png"):
                 print("check friend request screen")
                 util.tap(330, 610)
                 print("reject friend request")
@@ -246,25 +246,25 @@ class auto():
 
     def waiting_phase(self, phase: int):
         if phase == 1:
-            while not util.get_pos("images/phase1.png", 0.78):
+            while not util.standby("images/phase1.png", 0.78):
                 util.tap(920, 45)
                 print("Waiting for phase1")
                 time.sleep(0.2)
         elif phase == 2:
-            while not util.get_pos("images/phase2.png", 0.78):
+            while not util.standby("images/phase2.png", 0.78):
                 util.tap(920, 45)
                 print("Waiting for phase2")
                 self.needattack()
                 time.sleep(0.2)
         elif phase == 3:
-            while not util.get_pos("images/phase3.png", 0.78):
+            while not util.standby("images/phase3.png", 0.78):
                 util.tap(920, 45)
                 print("Waiting for phase3")
                 self.needattack()
                 time.sleep(0.2)
 
     def needattack(self):
-        if util.get_pos("images/attack.png"):
+        if util.standby("images/attack.png"):
             print("need attack")
             self.select_cards([1, 2, 3])
         else:
