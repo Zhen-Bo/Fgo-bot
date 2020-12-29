@@ -67,13 +67,5 @@ def list_tap(pos):
     adbkit.click(pos[0], pos[1])
 
 
-def swipe(org: (int, int), tar: (int, int), delay):
-    cmdSwipe = '/adb/adb.exe shell input swipe {x1} {y1} {x2} {y2} {delay1}'.format(
-        x1=org[0],
-        y1=org[1],
-        x2=tar[0],
-        y2=tar[1],
-        delay1=int(delay*1000)
-    )
-    print(cmdSwipe)
-    os.system(cmdSwipe)
+def swipe(x1, y1, x2, y2, delay):
+    adbkit.swipe(x1, y1, x2, y2, delay)

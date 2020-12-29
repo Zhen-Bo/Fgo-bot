@@ -114,8 +114,8 @@ class auto():
                         else:
                             gap_pos, gap_h, gap_w = util.standby(
                                 "images/friend_gap.png", 0.8, True)
-                            util.swipe((int(gap_pos[0]+(gap_w/2)),
-                                        int(gap_pos[1]+(gap_h/2))), (int(gap_pos[0]+(gap_w/2)), 210), 1.5)
+                            util.swipe(
+                                gap_pos[0]+(gap_w/2), gap_pos[1]+(gap_h/2), gap_pos[0]+(gap_w/2), 210, 1.5)
                 else:
                     end_pos = util.standby("images/friendEnd.png")
                     end_pos = end_pos[:1]
@@ -127,8 +127,8 @@ class auto():
                         print("swipe down")
                         gap_pos, gap_h, gap_w = util.standby(
                             "images/friend_gap.png", 0.8, True)
-                        util.swipe((int(gap_pos[0]+(gap_w/2)),
-                                    int(gap_pos[1]+(gap_h/2))), (int(gap_pos[0]+(gap_w/2)), 210), 1.5)
+                        util.swipe(
+                            gap_pos[0]+(gap_w/2), gap_pos[1]+(gap_h/2), gap_pos[0]+(gap_w/2), 210, 1.5)
             else:
                 flag1 = False
                 spt_center = [int(spt_pos[0]+5),
