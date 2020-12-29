@@ -5,7 +5,7 @@ import os
 class adbKit(object):
     def screenshots(self):
         os.system('/adb/adb.exe shell screencap -p /sdcard/screencap.png')
-        os.system('/adb/adb.exe pull /sdcard/screencap.png')
+        os.system('/adb/adb.exe pull /sdcard/screencap.png > $null')
 
     def click(self, pointx, pointy):
         Px = str(pointx)
