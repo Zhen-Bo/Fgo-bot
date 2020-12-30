@@ -37,10 +37,12 @@ def standby(template, acc=0.85, special=False):
         cv2.waitKey(1)
 
     if reslist[1] > acc:
-        print("[Detect]acc rate:", round(reslist[1], 2))
+        if debug:
+            print("[Detect]acc rate:", round(reslist[1], 2))
         return reslist[3], find_height, find_width
     else:
-        print("[Detect]acc rate:", round(reslist[1], 2))
+        if debug:
+            print("[Detect]acc rate:", round(reslist[1], 2))
         return False
 
 
