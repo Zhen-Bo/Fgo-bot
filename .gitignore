@@ -3,6 +3,6 @@ screencap.png
 /__pycache__/
 /config/__pycache__/
 /core/__pycache__/
-UserData/config
+UserData/config/*.ini
 screencap-rect.png
 tmp
