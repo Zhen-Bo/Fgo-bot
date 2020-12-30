@@ -1,15 +1,18 @@
 from configparser import ConfigParser
 import time
+import os
 from core import decoder
 from core.auto import auto
 
 if __name__ == '__main__':
     while True:
         print('請輸入設定檔名稱(不需輸入.ini):')
-
         cfg_name = input()
         cfg = ConfigParser()
         ini_path = "UserData/config/" + cfg_name + ".ini"
+        while not os.path.isfile(ini_path):
+            print('請輸入設定檔名稱(不需輸入.ini):')
+            cfg_name = input()
         cfg.read(ini_path)
 
         run_times = cfg['run_times']['times']

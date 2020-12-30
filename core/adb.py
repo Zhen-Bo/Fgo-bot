@@ -6,8 +6,12 @@ from cv2 import cv2
 
 
 class adbKit(object):
+    """def __init__(self) -> None:
+        os.system("/adb/adb.exe kill-server")
+        os.system("/adb/adb.exe start-server")"""
+
     def screenshots(self):
-        pipe = subprocess.Popen("adb shell screencap -p",
+        pipe = subprocess.Popen("/adb/adb.exe shell screencap -p",
                                 stdin=subprocess.PIPE,
                                 stdout=subprocess.PIPE, shell=True)
         image_bytes = pipe.stdout.read().replace(b'\r\n', b'\n')

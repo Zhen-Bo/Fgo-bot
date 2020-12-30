@@ -8,6 +8,8 @@ from core import adb
 
 adbkit = adb.adbKit()
 
+debug = False
+
 
 def standby(template, acc=0.85, special=False):
     # 模擬器截圖
@@ -27,9 +29,12 @@ def standby(template, acc=0.85, special=False):
     reslist = cv2.minMaxLoc(result)
     #reslist[1] = max__val; reslist[3] = max_loc;
 
-    cv2.rectangle(target_img, reslist[3], (reslist[3][0]+find_width, reslist[3][1]+find_height),
-                  color=(0, 255, 0), thickness=2)
-    cv2.imwrite("screencap.png", target_img)
+    if debug:
+        cv2.rectangle(target_img, reslist[3], (reslist[3][0]+find_width,
+                                               reslist[3][1]+find_height), color=(0, 255, 0), thickness=2)
+        #cv2.imwrite("screencap.png", target_img)
+        cv2.imshow("screenshots", target_img)
+        cv2.waitKey(1)
 
     if reslist[1] > acc:
         print("[Detect]acc rate:", round(reslist[1], 2))
