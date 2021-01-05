@@ -74,14 +74,6 @@ class auto():
                 tEnd = time.time()
                 if int(tEnd - tStart) >= timer:
                     break
-                elif i == 29:
-                    remain = timer - int(tEnd - tStart)
-                    if remain <= 60:
-                        print("[INFO] Remain", remain, "seconds")
-                    else:
-                        remain /= 60.0
-                        remain = round(remain, 1)
-                        print("[INFO] Remain", remain, "minutes")
                 time.sleep(1)
 
     def update_support(self):
@@ -103,12 +95,11 @@ class auto():
         flag1 = True
         flag2 = True
         while flag1:
-            spt_pos, spt_h, spt_w = util.standby(spt)
+            spt_pos = util.standby(spt)
             if spt_pos == False:
                 print("[INFO] Friend not found")
                 if flag2:
                     bar_pos = util.standby("images/bar.png")
-                    bar_pos = bar_pos[:1]
                     if bar_pos == False:
                         if self.debug:
                             print("no bar")
@@ -130,7 +121,6 @@ class auto():
                                 gap_pos[0]+(gap_w/2), gap_pos[1]+(gap_h/2), gap_pos[0]+(gap_w/2), 210, 1.5)
                 else:
                     end_pos = util.standby("images/friendEnd.png")
-                    end_pos = end_pos[:1]
                     if end_pos[0] != False:
                         print("[INFO] End of friend list")
                         self.update_support()
@@ -144,8 +134,8 @@ class auto():
                             gap_pos[0]+(gap_w/2), gap_pos[1]+(gap_h/2), gap_pos[0]+(gap_w/2), 210, 1.5)
             else:
                 flag1 = False
-                spt_center = [int(spt_pos[0]+5),
-                              int(spt_pos[1]+5)]
+                spt_center = [int(spt_pos[0][0]+5),
+                              int(spt_pos[0][1]+5)]
                 util.list_tap(spt_center)
 
     def start_battle(self):
@@ -156,19 +146,20 @@ class auto():
 
     def select_servant_skill(self, skill: int, tar: int = 0):
         while not util.standby("images/attack.png"):
-            print("[BATTLE] Waiting for Attack button")
-            time.sleep(0.2)
+            print("[BATTLE] Waiting for Attack button", end="\r")
+            time.sleep(1)
         pos = self.cfg['skills']['%s' % skill]
         pos = pos.split(',')
         util.tap(pos[0], pos[1])
         if tar != 0:
             print("[Skill] Use servent", str(int((skill-1)/3 + 1)),
                   "skill", str((skill-1) % 3 + 1), "to servent", tar)
-            time.sleep(0.5)
+            time.sleep(1)
             self.select_servant(tar)
         else:
             print("[Skill] Use servent", str(int((skill-1)/3 + 1)),
                   "skill", str((skill-1) % 3 + 1))
+            time.sleep(1)
 
     def select_servant(self, servant: int):
         while not util.standby("images/select.png"):
@@ -180,8 +171,9 @@ class auto():
         time.sleep(0.5)
 
     def select_cards(self, cards: [int]):
+        time.sleep(1)
         while not util.standby("images/attack.png"):
-            print("[BATTLE] Waiting for Attack button")
+            print("[BATTLE] Waiting for Attack button", end="\r")
             time.sleep(0.2)
         # tap ATTACK
         pos = self.cfg['attack']['button']
@@ -203,7 +195,7 @@ class auto():
 
     def select_master_skill(self, skill: int, org: int = 0, tar: int = 0):
         while not util.standby("images/attack.png"):
-            print("[BATTLE] Waiting for Attack button")
+            print("[BATTLE] Waiting for Attack button", end="\r")
             time.sleep(0.2)
         self.toggle_master_skill()
         pos = self.cfg['master']['%s' % skill]
@@ -217,7 +209,7 @@ class auto():
 
     def toggle_master_skill(self):
         while not util.standby("images/attack.png"):
-            print("[BATTLE] Waiting for Attack button")
+            print("[BATTLE] Waiting for Attack button", end="\r")
             time.sleep(0.2)
         pos = self.cfg['master']['button']
         pos = pos.split(',')

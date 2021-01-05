@@ -13,9 +13,9 @@ if __name__ == '__main__':
         while not os.path.isfile(ini_path):
             print('請輸入設定檔名稱(不需輸入.ini):')
             cfg_name = input()
+            ini_path = "UserData/config/" + cfg_name + ".ini"
         cfg.read(ini_path)
 
-        run_times = cfg['run_times']['times']
         support = cfg['support']['support']
         apple_count = cfg['ap_recover']['count']
         apple = cfg['ap_recover']['apple']
@@ -36,6 +36,10 @@ if __name__ == '__main__':
                      int(recover_time) * 60)
         tstart = time.time()
         counter = 0
+        run_times = input("請輸入次數")
+        while not run_times.isdigit():
+            os.system('cls')
+            run_times = input("請輸入次數")
         for i in range(int(run_times)):
             print("Round:", i+1)
             instr = decoder.decode(codelist)
