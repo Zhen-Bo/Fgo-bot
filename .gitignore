@@ -6,4 +6,4 @@ screencap.png
 UserData/config/*.ini
 screencap-rect.png
 tmp
-/.vscode/*
+.vscode/
