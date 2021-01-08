@@ -34,9 +34,9 @@ if __name__ == '__main__':
         ckp = images_path + "/menu.png"
         round = auto(ckp, support, (int(apple_count), apple),
                      int(recover_time) * 60)
+        run_times = input("請輸入次數")
         tstart = time.time()
         counter = 0
-        run_times = input("請輸入次數")
         while not run_times.isdigit():
             os.system('cls')
             run_times = input("請輸入次數")
